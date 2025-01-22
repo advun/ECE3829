@@ -22,17 +22,19 @@
 
 module input_select(
     input [15:0] sw,
-    output reg [3:0] displayA,
-    output reg [3:0] displayB,
+    output reg [3:0] displayD,
     output reg [3:0] displayC,
-    output reg [3:0] displayD
+    output reg [3:0] displayB,
+    output reg [3:0] displayA
     );
     
-    wire times2[4:0], sum[4:0];
+    wire [4:0] times2;
+    wire [4:0] sum;
+    
     assign times2 = sw[13:8]<<1;
     assign sum = sw[7:4] + sw[3:0];
     
-    always @ (sw)
+    always @ (sw) begin
         case(sw[15:14])
             2'b00: begin //case 0: last 4 of ID
                     displayA = 4'b0111; //7
@@ -62,7 +64,7 @@ module input_select(
                     displayD = sum[3:0];            
                     end
         endcase
-    
+    end
     
     
     
