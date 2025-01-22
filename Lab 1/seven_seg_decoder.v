@@ -22,11 +22,11 @@
 
 module seven_seg_decoder(
     input [3:0] ABCD,
-    input [6:0] abcdefg
+    output reg [6:0] abcdefg
     );
     
-    always @ (*)  //all values are flipped, as cathodes have to be low to turn on LED
-        case(buttons)
+    always @ (*) begin //all values are flipped, as cathodes have to be low to turn on LED
+        case(ABCD)
             default: abcdefg = 7'b1111111;
             4'b0000: abcdefg = 7'b0000001;  //0
             4'b0001: abcdefg = 7'b1001111;  //1
@@ -45,4 +45,6 @@ module seven_seg_decoder(
             4'b1110: abcdefg = 7'b0110000;  //E
             4'b1111: abcdefg = 7'b0111000;  //F
         endcase
+     end
+     
 endmodule
