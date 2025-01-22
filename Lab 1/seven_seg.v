@@ -12,7 +12,7 @@
 // Description: 
 // turns on displays and updates displays
 // Dependencies: 
-// none
+// seven_seg_decoder
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
@@ -21,29 +21,46 @@
 
 
 module seven_seg(
-    input [3:0] buttons,
-    input [3:0] dispA,
-    input [3:0] dispB,
-    input [3:0] dispC,
-    input [3:0] dispD,
+    input [3:0] displayD,
+    input [3:0] displayC,
+    input [3:0] displayB,
+    input [3:0] displayA,
+    input [3:0] buttonsLRUD,
     output reg [3:0] an,
     output [6:0] seg
     );
     
-    wire [3:0] dispHolder;
     
-    always @ (*)
-        case(buttons)//turns on display according to button press
-            default: an = 4'b1111;  //no anode low
-            4'b0001: an = 4'b1110;  //anode 0 low
-            4'b0010: an = 4'b1101;  //anode 1 low
-            4'b0100: an = 4'b1011;  //anode 2 low
-            4'b1000: an = 4'b0111;  //anode 3 low
+    reg [3:0] dispHolder;
+
+    
+    always @ (*) begin
+        case(buttonsLRUD)//turns on display according to button press
+            default: an = 4'b1111;  //no anode low (anode active low)
+            
+            4'b0001: begin //if button D pressed
+                        an = 4'b1110;  //anode 0 low (D)
+                        dispHolder = displayD; //display values for D
+                     end
+                     
+            4'b0010: begin //if button U pressed
+                        an = 4'b1101;  //anode 1 low (C)
+                        dispHolder = displayC; //display values for C
+                     end
+            
+            4'b0100: begin //if button R pressed
+                        an = 4'b1011;  //anode 2 low (B)
+                        dispHolder = displayB; //display values for B
+                     end
+                     
+            4'b1000: begin //if button L pressed
+                        an = 4'b0111;  //anode 3 low (A)
+                        dispHolder = displayA; //display values for A
+                     end
             endcase 
+        end
             
-            
-            
-    seven_seg_decoder cath_decoder (dispHolder, seg);  
+    seven_seg_decoder cath_decoder (dispHolder, seg);  //convert displayed value to seven segment cathodes
 
 
 endmodule 
