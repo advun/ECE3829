@@ -28,22 +28,22 @@ module seven_seg_decoder(
     always @ (*) begin //all values are flipped, as cathodes have to be low to turn on LED
         case(ABCD)
             default: abcdefg = 7'b1111111;
-            4'b0000: abcdefg = 7'b0000001;  //0
-            4'b0001: abcdefg = 7'b1001111;  //1
-            4'b0010: abcdefg = 7'b0010010;  //2
-            4'b0011: abcdefg = 7'b0000110;  //3
-            4'b0100: abcdefg = 7'b1001100;  //4
-            4'b0101: abcdefg = 7'b0100100;  //5
-            4'b0110: abcdefg = 7'b0100000;  //6
-            4'b0111: abcdefg = 7'b0001111;  //7
+            4'b0000: abcdefg = 7'b1000000;  //0
+            4'b0001: abcdefg = 7'b1111001;  //1
+            4'b0010: abcdefg = 7'b0100100;  //2
+            4'b0011: abcdefg = 7'b0110000;  //3
+            4'b0100: abcdefg = 7'b0011001;  //4
+            4'b0101: abcdefg = 7'b0010010;  //5
+            4'b0110: abcdefg = 7'b0000010;  //6
+            4'b0111: abcdefg = 7'b1111000;  //7
             4'b1000: abcdefg = 7'b0000000;  //8
-            4'b1001: abcdefg = 7'b0001100;  //9
+            4'b1001: abcdefg = 7'b0011000;  //9
             4'b1010: abcdefg = 7'b0001000;  //A
-            4'b1011: abcdefg = 7'b1100000;  //B
-            4'b1100: abcdefg = 7'b0110001;  //C
-            4'b1101: abcdefg = 7'b1000010;  //D
-            4'b1110: abcdefg = 7'b0110000;  //E
-            4'b1111: abcdefg = 7'b0111000;  //F
+            4'b1011: abcdefg = 7'b0000011;  //B
+            4'b1100: abcdefg = 7'b1000110;  //C
+            4'b1101: abcdefg = 7'b0100001;  //D
+            4'b1110: abcdefg = 7'b0000110;  //E
+            4'b1111: abcdefg = 7'b0001110;  //F
         endcase
      end
      
