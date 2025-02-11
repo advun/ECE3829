@@ -38,12 +38,6 @@ module seven_seg_decoder(
             4'b0111: abcdefg = 7'b1111000;  //7
             4'b1000: abcdefg = 7'b0000000;  //8
             4'b1001: abcdefg = 7'b0011000;  //9
-            4'b1010: abcdefg = 7'b0001000;  //A
-            4'b1011: abcdefg = 7'b0000011;  //B
-            4'b1100: abcdefg = 7'b1000110;  //C
-            4'b1101: abcdefg = 7'b0100001;  //D
-            4'b1110: abcdefg = 7'b0000110;  //E
-            4'b1111: abcdefg = 7'b0001110;  //F
         endcase
      end
      

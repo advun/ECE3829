@@ -3,14 +3,14 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 02/07/2025 03:57:15 PM
+// Create Date: 02/07/2025 07:20:46 PM
 // Design Name: 
-// Module Name: drawFullscreen
+// Module Name: drawStripe
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
 // Description: 
-// displays a blank yellow screen
+// draws a horizontal blue stripe along the bottom of the screen
 // Dependencies: 
 // 
 // Revision:
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module drawFullscreen(
+module drawStripe(
     input [11:0] colorIn,
     input [10:0] hcount,
     input [10:0] vcount,
@@ -28,15 +28,19 @@ module drawFullscreen(
     output reg [11:0] colorOut
     );
     
+    
     parameter colorBLACK = 12'b000000000000;
+    parameter ycoord = 447;
     
     always @(hcount or vcount)
     begin
         if (blank) //if outside display area:
             colorOut <= colorBLACK;  //set color to black, as stated in vga_controller_640_60.vhd
-        else
+        else if (vcount > ycoord)
             colorOut <= colorIn;
-    end
-    
-    
+        else
+            colorOut <= colorBLACK;
+        end
+        
+        
 endmodule

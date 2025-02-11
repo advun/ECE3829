@@ -3,14 +3,14 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 02/07/2025 03:57:15 PM
+// Create Date: 02/07/2025 06:52:49 PM
 // Design Name: 
-// Module Name: drawFullscreen
+// Module Name: drawStripes
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
 // Description: 
-// displays a blank yellow screen
+// displays red and white stripes along the screen
 // Dependencies: 
 // 
 // Revision:
@@ -20,8 +20,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module drawFullscreen(
-    input [11:0] colorIn,
+module drawStripes(
+    input [11:0] colorIn0,
+    input [11:0] colorIn1,
     input [10:0] hcount,
     input [10:0] vcount,
     input blank,
@@ -29,13 +30,16 @@ module drawFullscreen(
     );
     
     parameter colorBLACK = 12'b000000000000;
-    
-    always @(hcount or vcount)
+    parameter stripWidth = 16;  //width of strips
+
+    always @ (hcount or vcount) 
     begin
-        if (blank) //if outside display area:
+    if (blank) //if outside display area:
             colorOut <= colorBLACK;  //set color to black, as stated in vga_controller_640_60.vhd
-        else
-            colorOut <= colorIn;
+    else if ((hcount / stripWidth) % 2  == 0)  //if strip number is even
+            colorOut <= colorIn1;
+    else //if strip number is odd
+            colorOut <= colorIn0;
     end
     
     
