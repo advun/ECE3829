@@ -41,7 +41,7 @@ module seven_seg(
        
     assign update = (count_value == MAX_COUNT);
     
-    //100Hz counter
+    //500Hz counter
     always @ (posedge clk_25MHz or negedge reset_n) begin
         if (reset_n == 1'b0) begin
             count_value <= 21'b0;
@@ -56,7 +56,7 @@ module seven_seg(
     
     
     
-        //25Hz counter (cycles through seven segment display)
+        //125Hz counter (cycles through seven segment display)
     always @ (posedge clk_25MHz or negedge reset_n) begin
         if (reset_n == 1'b0) begin
             ledselect <= 4'b0001; //on reset, start with display 4 on
