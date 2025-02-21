@@ -29,7 +29,7 @@ module light_sensor #(parameter capture_rate = 1)(
     output reg [7:0] data_out //8 bit output data from sensor
     );
     
-    parameter max_updatecount = 10_000_000 / capture_rate; //determine how often to get data
+    localparam max_updatecount = 10_000_000 / capture_rate; //determine how often to get data
     reg [23:0] updatecount_value;
     
     wire get_data;
@@ -49,17 +49,18 @@ module light_sensor #(parameter capture_rate = 1)(
         end
     end
     
-    parameter max_sclkcount = 5; //1 Mhz clock for Sclk
-    reg [23:0] sclkcount_value;
+    //localparam max_sclkcount = 5-1; //1 Mhz clock for Sclk
+    localparam max_flagcount = 10-1; //1 Mhz clock for Sclk
+    //reg [23:0] sclkcount_value;
     reg [23:0] sclkflag_value;
-    reg sclk_flag;  //high if rising, low if falling
+    //reg sclk_flag;  //high if rising, low if falling
     
-    
+    /*
     //counter for SCLK
     always @ (posedge clk_10Mhz or negedge reset_n) begin
         if (reset_n == 1'b0) begin
             sclkcount_value <= 24'b0;
-            SCLK <= 1'b0;
+            SCLK <= 1'b1;
         end
         else if (sclkcount_value == (max_sclkcount)) begin
             sclkcount_value <= 24'b0;
@@ -69,27 +70,43 @@ module light_sensor #(parameter capture_rate = 1)(
             sclkcount_value <= sclkcount_value + 24'b1;
         end
     end
+    */
+    
+    wire rising_edge;
+    wire falling_edge;
+    
+    assign rising_edge = ((sclkflag_value == 0) ? 1'b1 : 1'b0);
+    assign falling_edge = ((sclkflag_value == 5) ? 1'b1 : 1'b0);
     
     //counter for SCLK Flag (high on falling edge of SCLK)
     always @ (posedge clk_10Mhz or negedge reset_n) begin
         if (reset_n == 1'b0) begin
             sclkflag_value <= 24'b0;
-            sclk_flag <= 1'b0;
+            //sclk_flag <= 1'b0;
         end
-        else if (sclkflag_value == (max_sclkcount)* 2) begin
+        else if (sclkflag_value == (max_flagcount)) begin
             sclkflag_value <= 24'b0;
-            sclk_flag <= 1'b1;  //set to high for one tick every 100 ns  
+            //sclk_flag <= 1'b1;  //set to high for one tick every 100 ns  
         end
         else begin
             sclkflag_value <= sclkflag_value + 24'b1;
-            sclk_flag <= 1'b0;
+            //sclk_flag <= 1'b0;
+        end
+    end
+    
+    always @(*) begin
+        if (rising_edge == 1) begin
+            SCLK <= 1'b1;
+        end
+        if (falling_edge == 1) begin
+            SCLK <= 1'b0;
         end
     end
     
     
-    parameter STATE_IDLE = 2'b00;
-    parameter STATE_READ = 2'b10;
-    parameter STATE_DONE = 2'b11;
+    localparam STATE_IDLE = 2'b00;
+    localparam STATE_READ = 2'b10;
+    localparam STATE_DONE = 2'b11;
     
     reg [1:0] current_state;
     reg [1:0] next_state;
@@ -116,7 +133,7 @@ module light_sensor #(parameter capture_rate = 1)(
                 
                 if (get_data == 1'b1) begin
                     next_state <= STATE_READ;
-                    data_counter <= 3'b0;
+                    data_counter <= 4'b0;
                 end
             end
             
@@ -124,7 +141,7 @@ module light_sensor #(parameter capture_rate = 1)(
             STATE_READ: begin
                 CS_N <= 1'b0; //Chip select low
                 
-                if (sclk_flag == 1) begin  //when sclk is falling
+                if(sclk_flag == 1) begin  //when sclk is falling
                     hold_data <= {hold_data[13:0], SDATA}; //shift
                     data_counter <= data_counter + 1;  //tick up data counter
                 end
