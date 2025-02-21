@@ -10,9 +10,9 @@
 // Target Devices: 
 // Tool Versions: 
 // Description: 
-// 
+// Top of Lab 3
 // Dependencies: 
-// 
+// clk_mmcm_wiz, light_sensor, seven_seg
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
@@ -25,17 +25,17 @@ module top_lab3(
     input btnC, //center button for reset
     output [3:0] an,
     output [6:0] seg,
-    output JA0, //CS
+    output JA0, //CS_N
     input JA2,  //SDO
     output JA3 //SCL
     );
     
-    parameter SEVEN = 4'b0111;
-    parameter FOUR = 4'b0100;
+    parameter SEVEN = 4'b0111; //value for ID display
+    parameter FOUR = 4'b0100; //value for ID display
     
     wire clk_10Mhz, lock;
-    reg reset_intermediate;
-    reg reset_n;
+    reg reset_intermediate; //intermediate holder for reset in flip flops
+    reg reset_n; //active low reset
     
      //10 Mhz clock module
      clk_mmcm_wiz clk_mmcm_wiz1
